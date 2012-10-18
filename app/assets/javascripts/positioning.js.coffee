@@ -38,8 +38,11 @@ jQuery ($) ->
       
     # Set up swiper for the displayed floats.
     setContentSwiper: () =>
-      @_content_swiper = new Swipe @_content_window[0]
+      @_content_swiper = new Swipe @_content_window[0], {callback: @stopContentUpdate}
 
+    stopContentUpdate: () =>
+      @_updatable = false
+    
     # Get floats data from server and start updating the position
     # of the procession.
     getFloats: () =>
@@ -121,7 +124,6 @@ jQuery ($) ->
     # Update the slider position
     calcOffset: (geo_point) =>
       head_distance = $.headPos @_start_time, @_speed
-      console.log @_path
       position = $.closestPointOnLine geo_point, @_path
       index = $.indexOfClosestPointOnLine position, @_path
       start_dist = $.distanceAlongLine position, @_path, @_distances, index
