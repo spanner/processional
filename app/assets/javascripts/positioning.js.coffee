@@ -137,9 +137,10 @@ jQuery ($) ->
     updatePosition: (offset) =>
       @_slider.stop().animate
         left: offset
-        , 0
-      @_pointer.css
+        , 300
+      @_pointer.stop().animate
         left: -offset
+        , 300
       if @_updatable == true
         @findFloat(offset)
 
