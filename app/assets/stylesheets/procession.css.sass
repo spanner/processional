@@ -50,10 +50,6 @@ $slider_controls_height: 20px
     position: absolute
     height: $slider_controls_height
     width: 100%
-    .prev
-      float: left
-    .next
-      float: right
     #find_me
       margin-left: 100px
       float: left
@@ -64,13 +60,9 @@ $slider_controls_height: 20px
     bottom: 0
     width: 100%
     #content_window
+      height: 100%
       overflow: hidden
-      .content
-        float: left
-      .prev_float
-        position: absolute
-        left: 0
-      .next_float
-        position: absolute
-        right: 0
-      
+      #floats
+        height: 100%
+        .content_float
+          height: 100%
