@@ -6,7 +6,7 @@ jQuery ($) ->
       @_window = @_slider.parent()
       @_content_window = $('#content_window')
       @_speed = 1
-      @_start_time = new Date(2012, 9, 18, 15, 47)
+      @_start_time = new Date(2012, 9, 18, 16, 43)
       @_float = $('#float')
       @_pointer = @_slider.find('.pointer')
       # @_slider_offset = 0
@@ -35,52 +35,11 @@ jQuery ($) ->
 
     # create a swiper to scroll through the float blocks
     setSwiper: () =>
-      @_swiper = new Swipe @_window[0]#, {callback: @slideStick}
-    #   $('.next a').bind "click", () =>
-    #     @_swiper.scrollRight()
-    #   $('.prev a').bind "click", () =>
-    #     @_swiper.scrollLeft()
-    # 
-    #   # slide 100px left
-    #   @_swiper.scrollLeft = () =>
-    #     @_slider.animate
-    #       left: "#{@_slider.position().left + 100}px"
-    #       , 200
-    #     @_slider_offset += 100
-    # 
-    #   # Slide the swiper 100px right
-    #   @_swiper.scrollRight = () =>
-    #     @_slider.animate
-    #       left: "#{@_slider.position().left - 100}px"
-    #       , 200
-    #     @_slider_offset -= 100
-    # 
-    # slideStick : () =>
-    #   @_slider_offset = parseInt(@_swiper.element.style.OTransform.split("translateX(")[1].split("px")[0])
-    #   @_swiper.element.style.OTransform("translateX(0)")
-
+      @_swiper = new Swipe @_window[0]
+      
     # Set up swiper for the displayed floats.
     setContentSwiper: () =>
-      @_content_swiper = new Swipe @_content_window[0], {callback: @stopUpdating}
-      # $('.next_float a').bind "click", () =>
-      #   @_content_swiper.next()
-      #   @contentTransitionEnd(@_content_swiper)
-      #   
-      # $('.prev_float a').bind "click", () =>
-      #   @_content_swiper.prev()
-      #   @contentTransitionEnd(@_content_swiper)
-
-    # Scroll the slider to the same offset as the content swiper.
-    contentTransitionEnd: (content_swiper) =>
-      left = $(".slider .float[data-index='#{content_swiper.index}']").attr("data-offset")
-      @_slider.animate
-        left: "#{left}px"
-        , 200
-      @_sliding = false
-
-    # Prevent the content swiper from sliding automatically.
-    stopUpdating: () =>
-      @_updatable = false
+      @_content_swiper = new Swipe @_content_window[0]
 
     # Get floats data from server and start updating the position
     # of the procession.
@@ -100,8 +59,6 @@ jQuery ($) ->
     # Allow the content swiper to slide automatically.
     findPointer: (e) =>
       e.preventDefault()
-      # @_slider_offset = 0
-      @_sliding = true
       @deviceLocation()
       @_updatable = true
 
@@ -143,6 +100,7 @@ jQuery ($) ->
     # a latitude/longitude object.
     # Calculate the offset between device and head of procession.
     getPosition: (location) =>
+      console.log "geolocation", location
       point =
         latitude: location.coords.latitude
         longitude: location.coords.longitude
@@ -163,7 +121,8 @@ jQuery ($) ->
     # the device.
     # Calculate distance between head of procession and device.
     # Update the slider position
-    calcOffset: (geo_point) =>    
+    calcOffset: (geo_point) =>
+      console.log "geo_point", geo_point
       head_distance = $.headPos @_start_time, @_speed
       position = $.closestPointOnLine geo_point, @_path
       index = $.indexOfClosestPointOnLine position, @_path
@@ -176,10 +135,9 @@ jQuery ($) ->
     # Move the pointer to the device's position in procession.
     # Move the content swiper to the right float.
     updatePosition: (offset) =>
-      if @_sliding == true
-        @_slider.stop().animate
-          left: offset# + @_slider_offset
-          , 0
+      @_slider.stop().animate
+        left: offset
+        , 0
       @_pointer.css
         left: -offset
       if @_updatable == true
