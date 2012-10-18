@@ -3,7 +3,6 @@ require "bundler/capistrano"
 require "rvm/capistrano"
 # require "delayed/recipes"
 
-ssh_options[:keys] = ["/Users/will/.ssh/bloodnok.pem"]
 set :user, 'spanner'
 set :group, 'spanner'
 
@@ -26,6 +25,7 @@ set :scm, :git
 set :repository, "git@github.com:spanner/processional.git"
 set :use_sudo, false
 
+ssh_options[:keys] = ["/Users/mike/.ssh/bloodnok.pem"]
 ssh_options[:forward_agent] = true
 default_run_options[:pty] = true
 
