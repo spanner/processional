@@ -6,10 +6,9 @@ jQuery ($) ->
       @_window = @_slider.parent()
       @_content_window = $('#content_window')
       @_speed = 1
-      @_start_time = new Date(2012, 9, 18, 16, 43)
+      @_start_time = Date.now()
       @_float = $('#float')
       @_pointer = @_slider.find('.pointer')
-      # @_slider_offset = 0
       @_updatable = true
       @_sliding = true
       @getPath()
@@ -100,7 +99,6 @@ jQuery ($) ->
     # a latitude/longitude object.
     # Calculate the offset between device and head of procession.
     getPosition: (location) =>
-      console.log "geolocation", location
       point =
         latitude: location.coords.latitude
         longitude: location.coords.longitude
@@ -122,8 +120,8 @@ jQuery ($) ->
     # Calculate distance between head of procession and device.
     # Update the slider position
     calcOffset: (geo_point) =>
-      console.log "geo_point", geo_point
       head_distance = $.headPos @_start_time, @_speed
+      console.log @_path
       position = $.closestPointOnLine geo_point, @_path
       index = $.indexOfClosestPointOnLine position, @_path
       start_dist = $.distanceAlongLine position, @_path, @_distances, index
