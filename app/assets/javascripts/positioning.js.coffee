@@ -9,7 +9,7 @@ jQuery ($) ->
       @_start_time = new Date(2012, 9, 18, 15, 47)
       @_float = $('#float')
       @_pointer = @_slider.find('.pointer')
-      @_slider_offset = 0
+      # @_slider_offset = 0
       @_updatable = true
       @_sliding = true
       @getPath()
@@ -35,40 +35,40 @@ jQuery ($) ->
 
     # create a swiper to scroll through the float blocks
     setSwiper: () =>
-      @_swiper = new Swipe @_window[0], {callback: @slideStick}
-      $('.next a').bind "click", () =>
-        @_swiper.scrollRight()
-      $('.prev a').bind "click", () =>
-        @_swiper.scrollLeft()
-
-      # slide 100px left
-      @_swiper.scrollLeft = () =>
-        @_slider.animate
-          left: "#{@_slider.position().left + 100}px"
-          , 200
-        @_slider_offset += 100
-
-      # Slide the swiper 100px right
-      @_swiper.scrollRight = () =>
-        @_slider.animate
-          left: "#{@_slider.position().left - 100}px"
-          , 200
-        @_slider_offset -= 100
-
-    slideStick : () =>
-      @_slider_offset = parseInt(@_swiper.element.style.OTransform.split("translateX(")[1].split("px")[0])
-      @_swiper.element.style.OTransform("translateX(0)")
+      @_swiper = new Swipe @_window[0]#, {callback: @slideStick}
+    #   $('.next a').bind "click", () =>
+    #     @_swiper.scrollRight()
+    #   $('.prev a').bind "click", () =>
+    #     @_swiper.scrollLeft()
+    # 
+    #   # slide 100px left
+    #   @_swiper.scrollLeft = () =>
+    #     @_slider.animate
+    #       left: "#{@_slider.position().left + 100}px"
+    #       , 200
+    #     @_slider_offset += 100
+    # 
+    #   # Slide the swiper 100px right
+    #   @_swiper.scrollRight = () =>
+    #     @_slider.animate
+    #       left: "#{@_slider.position().left - 100}px"
+    #       , 200
+    #     @_slider_offset -= 100
+    # 
+    # slideStick : () =>
+    #   @_slider_offset = parseInt(@_swiper.element.style.OTransform.split("translateX(")[1].split("px")[0])
+    #   @_swiper.element.style.OTransform("translateX(0)")
 
     # Set up swiper for the displayed floats.
     setContentSwiper: () =>
       @_content_swiper = new Swipe @_content_window[0], {callback: @stopUpdating}
-      $('.next_float a').bind "click", () =>
-        @_content_swiper.next()
-        @contentTransitionEnd(@_content_swiper)
-        
-      $('.prev_float a').bind "click", () =>
-        @_content_swiper.prev()
-        @contentTransitionEnd(@_content_swiper)
+      # $('.next_float a').bind "click", () =>
+      #   @_content_swiper.next()
+      #   @contentTransitionEnd(@_content_swiper)
+      #   
+      # $('.prev_float a').bind "click", () =>
+      #   @_content_swiper.prev()
+      #   @contentTransitionEnd(@_content_swiper)
 
     # Scroll the slider to the same offset as the content swiper.
     contentTransitionEnd: (content_swiper) =>
@@ -100,7 +100,7 @@ jQuery ($) ->
     # Allow the content swiper to slide automatically.
     findPointer: (e) =>
       e.preventDefault()
-      @_slider_offset = 0
+      # @_slider_offset = 0
       @_sliding = true
       @deviceLocation()
       @_updatable = true
@@ -178,7 +178,7 @@ jQuery ($) ->
     updatePosition: (offset) =>
       if @_sliding == true
         @_slider.stop().animate
-          left: offset + @_slider_offset
+          left: offset# + @_slider_offset
           , 0
       @_pointer.css
         left: -offset

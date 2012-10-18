@@ -10,12 +10,12 @@
       .pointer
         YOU ARE HERE
   #slider_controls
-    .prev
-      %a{:href => "#"}
-        <
-    .next
-      %a{:href => "#"}
-        >
+    / .prev
+    /   %a{:href => "#"}
+    /     <
+    / .next
+    /   %a{:href => "#"}
+    /     >
     #find_me
       %a{:href => "#"}
         where am I?
@@ -27,9 +27,9 @@
           .content_float{:"data-float-id" => float.id, :"data-index" => index}
             - index += 1
             = render :partial => "procession_floats/float", :object => float
-      .prev_float
-        %a{:href => "#"}
-          <
-      .next_float
-        %a{:href => "#"}
-          >
+      / .prev_float
+      /   %a{:href => "#"}
+      /     <
+      / .next_float
+      /   %a{:href => "#"}
+      /     >
