@@ -1,0 +1,76 @@
+body
+$pointer_margin: 120px
+$slider_height: 100px
+$top_margin: 20px
+$slider_controls_height: 20px
+.body
+  position: relative
+  margin: auto
+  width: 320px
+  height: 480px
+  background:
+    color: #dde
+  a
+    text-decoration: none
+  #window
+    margin-top: $top_margin !important
+    position: absolute
+    overflow: hidden
+    height: $slider_height
+    width: 100%
+    .slider
+      position: absolute
+      height: $slider_height - 20px
+      margin-left: $pointer_margin !important
+      .pointer
+        position: absolute
+        float: left
+        bottom: -20px
+        padding-left: 20px
+        margin-left: -10px
+        background:
+          image: image-url('pointer.png')
+          repeat: no-repeat
+          size: 18px
+          position: 0 -1px
+      .float
+        position: absolute
+        height: 100%
+        background:
+          color: blue
+        p
+          position: absolute
+          left: 5px
+          bottom: 5px
+          color: #fff
+          margin: 0
+  
+  #slider_controls
+    top: $slider_height + $top_margin
+    position: absolute
+    height: $slider_controls_height
+    width: 100%
+    .prev
+      float: left
+    .next
+      float: right
+    #find_me
+      margin-left: 100px
+      float: left
+    
+  #content
+    position: absolute
+    top: $slider_height + $top_margin + $slider_controls_height
+    bottom: 0
+    width: 100%
+    #content_window
+      overflow: hidden
+      .content
+        float: left
+      .prev_float
+        position: absolute
+        left: 0
+      .next_float
+        position: absolute
+        right: 0
+      

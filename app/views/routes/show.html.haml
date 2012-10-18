@@ -1,0 +1,35 @@
+.body
+  #window
+    .slider
+      - index = 0
+      - ProcessionFloat.all.each do |float|
+        %a.float{:href => "#", :"data-float-id" => float.id, :style => "width: #{float.length}px !important; left:#{float.offset}px", :"data-index" => index, :"data-offset" => -float.offset}
+          - index += 1
+          %p
+            = float.name
+      .pointer
+        YOU ARE HERE
+  #slider_controls
+    .prev
+      %a{:href => "#"}
+        <
+    .next
+      %a{:href => "#"}
+        >
+    #find_me
+      %a{:href => "#"}
+        where am I?
+  #content
+    #content_window
+      #floats
+        - index = 0
+        - ProcessionFloat.all.each do |float|
+          .content_float{:"data-float-id" => float.id, :"data-index" => index}
+            - index += 1
+            = render :partial => "procession_floats/float", :object => float
+      .prev_float
+        %a{:href => "#"}
+          <
+      .next_float
+        %a{:href => "#"}
+          >
