@@ -64,8 +64,6 @@ jQuery ($) ->
       
     # Prevent content slider from sliding automatically.
     contentStick: () =>
-      $('.body').css
-        "background-color": "black"
       @_updatable = false
     
     # Get floats data from server and start updating the position
