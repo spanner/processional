@@ -150,14 +150,12 @@ jQuery ($) ->
     # Move the content swiper to the right float.
     updatePosition: (offset) =>
       if @_sliding
-        @_slider.stop().animate
+        @_slider.css
           left: offset
-          , 3000, "linear"
-      @_pointer.stop().animate
+      @_pointer.css
         left: -offset
-        , 3000, "linear"
       if @_updatable == true
-        @findFloat(offset)
+        @findFloat offset
 
     # Find the float being pointed at (or the next one if there is a next one)
     # and slide the content swiper to the same index
