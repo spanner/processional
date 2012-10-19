@@ -13,6 +13,8 @@ jQuery ($) ->
       @_updatable = true
       @_slideable = true
       @getPath()
+      @_pointer.css
+        visibility: "hidden"
       @getFloats()
       @setSwiper()
       @setContentSwiper()
@@ -77,7 +79,9 @@ jQuery ($) ->
     # Allow the content swiper to slide automatically.
     findPointer: (e) =>
       e.preventDefault()
-      @deviceLocation()
+      clearInterval(@_updater)
+      @setUpdater()
+      # @deviceLocation()
       unless @_swiper.index == 0
         @_swiper.slide 0
       @_updatable = true
@@ -113,7 +117,7 @@ jQuery ($) ->
         geolocation.getCurrentPosition @getPosition, @reportError,
           enableHighAccuracy: true
           timeout: timeoutVal
-          maximumAge: 0
+          maximumAge: 10000
       else
         alert "Geolocation is not supported by this browser"
 
@@ -121,15 +125,18 @@ jQuery ($) ->
     # a latitude/longitude object.
     # Calculate the offset between device and head of procession.
     getPosition: (location) =>
+      @_pointer.css
+        visibility: "visible"
       point =
         latitude: location.coords.latitude
         longitude: location.coords.longitude
       @calcOffset point
 
     # Return error message.
-    reportError = (error) =>
+    reportError: (error) =>
+      clearInterval(@_updater)
       errors = {
-        1: 'Permission denied',
+        1: 'User denied permission',
         2: 'Position unavailable',
         3: 'Request timeout'
       };
