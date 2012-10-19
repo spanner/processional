@@ -45,7 +45,7 @@ jQuery ($) ->
 
     # create a swiper to scroll through the float blocks
     setSwiper: () =>
-      @_swiper = new Swipe @_window[0], {callback: @noSlide}
+      @_swiper = new Swipe @_window[0], {moved_callback: @noSlide}
       
       # For non-swiping test purposes
       $('.next').bind "click", () =>
