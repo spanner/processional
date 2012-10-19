@@ -35,11 +35,10 @@ jQuery ($) ->
     # create a swiper to scroll through the float blocks
     setSwiper: () =>
       @_swiper = new Swipe @_window[0]
-      @_swiper.onTouchEnd = () ->
+      @_swiper.onTouchEnd = (e) ->
         isValidSlide = Number(new Date()) - this.start.time < 250 && Math.abs(this.deltaX) > 20 || Math.abs(this.deltaX) > this.width/2
-        isPastBounds = !this.index || this.index == this.length - 1 && this.deltaX < 0
         if !this.isScrolling
-          if isValidSlide && !isPastBounds
+          if isValidSlide
             i = this.deltaX < 0 ? 1 : -1
           else
             i = 0
@@ -55,6 +54,11 @@ jQuery ($) ->
     # Set up swiper for the displayed floats.
     setContentSwiper: () =>
       @_content_swiper = new Swipe @_content_window[0]
+      $('.next_float').bind "click", () =>
+        @_content_swiper.next()
+      $('.prev_float').bind "click", () =>
+        @_content_swiper.prev()
+      
       
     # Prevent content slider from sliding automatically.
     stopContentUpdate: () =>
