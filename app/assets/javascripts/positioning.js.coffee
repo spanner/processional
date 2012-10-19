@@ -32,26 +32,15 @@ jQuery ($) ->
       unless float_index == index
         i = parseInt(block.attr("data-index"), 10)
         @_content_swiper.slide(i)
-      
-  
-    # swipeTo: (i) =>
-    #   @_content_swiper.slide(i)
-    #   
-    #   
-    # showAndStick: (i) =>
-    #   @_updatable = false
-    #   @_content_swiper.slide(i)
-    #   
 
     # create a swiper to scroll through the float blocks
     setSwiper: () =>
       @_swiper = new Swipe @_window[0], {moved_callback: @noSlide}
-      
-      # For non-swiping test purposes
-      $('.next').bind "click", () =>
-        @_swiper.next()
-      $('.prev').bind "click", () =>
-        @_swiper.slide @_swiper.index-1, @_swiper.speed
+      # # For non-swiping test purposes
+      # $('.next').bind "click", () =>
+      #   @_swiper.next()
+      # $('.prev').bind "click", () =>
+      #   @_swiper.slide @_swiper.index-1, @_swiper.speed
       
     noSlide: () =>
       @_slideable = false
@@ -59,12 +48,11 @@ jQuery ($) ->
     # Set up swiper for the displayed floats.
     setContentSwiper: () =>
       @_content_swiper = new Swipe @_content_window[0], {moved_callback: @contentStick}
-      
-      # For non-swiping test purposes
-      $('.next_float').bind "click", () =>
-        @_content_swiper.next()
-      $('.prev_float').bind "click", () =>
-        @_content_swiper.prev()
+      # # For non-swiping test purposes
+      # $('.next_float').bind "click", () =>
+      #   @_content_swiper.next()
+      # $('.prev_float').bind "click", () =>
+      #   @_content_swiper.prev()
       
       
     # Prevent content slider from sliding automatically.
