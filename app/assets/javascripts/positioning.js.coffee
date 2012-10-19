@@ -35,26 +35,17 @@ jQuery ($) ->
     # create a swiper to scroll through the float blocks
     setSwiper: () =>
       @_swiper = new Swipe @_window[0]
-      @_swiper.onTouchEnd = (e) ->
-
-        # determine if slide attempt triggers next/prev slide
-        isValidSlide = 
-          Number(new Date()) - @.start.time < 250 && Math.abs(@_swiper.deltaX) > 20 || Math.abs(@_swiper.deltaX) > @_swiper.width/2
-
-        # determine if slide attempt is past start and end
-        isPastBounds = 
-          @.index == @.length - 1 && @.deltaX < 0   # or if last slide and slide amt is less than 0
+      @_swiper.onTouchEnd = () ->
+        isValidSlide = Number(new Date()) - this.start.time < 250 && Math.abs(this.deltaX) > 20 || Math.abs(this.deltaX) > this.width/2
+        isPastBounds = this.index == this.length - 1 && this.deltaX < 0
+        if !this.isScrolling
+          if isValidSlide && !isPastBounds
+            i = this.deltaX < 0 ? 1 : -1
+          else
+            i = 0
+          this.slide this.index + i, this.speed
+        e.stopPropagation()
         
-        if isValidSlide && !isPastBounds
-          i = @.deltaX < 0 ? 1 : -1
-        else
-          i = 0
-          
-        # if not scrolling vertically
-        if !@.isScrolling
-          # call slide function with slide end value based on isValidSlide and isPastBounds tests
-          @.slide( @.index + i, @.speed )
-      
       # For non-swiping test purposes
       $('.next').bind "click", () =>
         @_swiper.next()
@@ -64,7 +55,6 @@ jQuery ($) ->
     # Set up swiper for the displayed floats.
     setContentSwiper: () =>
       @_content_swiper = new Swipe @_content_window[0]
-      @_content_swiper.element.addEventListener "touchend", @stopContentUpdate()
       
     # Prevent content slider from sliding automatically.
     stopContentUpdate: () =>
@@ -181,7 +171,6 @@ jQuery ($) ->
       float = floats[0]
       content = @_float.find('.content')
       if float
-        console.log float
         i = @_floats.indexOf(float)
         @_content_swiper.slide i
       else
