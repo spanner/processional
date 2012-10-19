@@ -23,17 +23,27 @@ jQuery ($) ->
     # @_content_swiper object, slide the content_swiper to the same index
     displayFloat: (e) =>
       e.preventDefault()
-      @_updatable = false
+      @contentStick()
       block = $(e.currentTarget)
       float_index = block.attr('data-index')
       index = @_content_swiper.index
       unless float_index == index
         i = parseInt(block.attr("data-index"), 10)
         @_content_swiper.slide(i)
+  
+  
+    # swipeTo: (i) =>
+    #   @_content_swiper.slide(i)
+    #   
+    #   
+    # showAndStick: (i) =>
+    #   @_updatable = false
+    #   @_content_swiper.slide(i)
+    #   
 
     # create a swiper to scroll through the float blocks
     setSwiper: () =>
-      @_swiper = new Swipe @_window[0]
+      @_swiper = new Swipe @_window[0], {moved_callback: @contentStick}
       
       # For non-swiping test purposes
       $('.next').bind "click", () =>
@@ -51,7 +61,7 @@ jQuery ($) ->
       
       
     # Prevent content slider from sliding automatically.
-    stopContentUpdate: () =>
+    contentStick: () =>
       @_updatable = false
     
     # Get floats data from server and start updating the position
