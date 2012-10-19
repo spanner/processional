@@ -39,7 +39,8 @@ jQuery ($) ->
     # Set up swiper for the displayed floats.
     setContentSwiper: () =>
       @_content_swiper = new Swipe @_content_window[0], {callback: @stopContentUpdate}
-
+    
+    # Prevent content slider from sliding automatically
     stopContentUpdate: () =>
       @_updatable = false
     
@@ -135,9 +136,10 @@ jQuery ($) ->
     # Move the pointer to the device's position in procession.
     # Move the content swiper to the right float.
     updatePosition: (offset) =>
-      @_slider.stop().animate
-        left: offset
-        , 300
+      if @_sliding
+        @_slider.stop().animate
+          left: offset
+          , 300
       @_pointer.stop().animate
         left: -offset
         , 300
