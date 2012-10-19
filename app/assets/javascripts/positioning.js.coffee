@@ -162,6 +162,7 @@ jQuery ($) ->
     updatePosition: (offset) =>
       @_slider.css
         left: offset
+        "margin-left": "#{offset+120}px"
       @_pointer.css
         left: -offset
       if @_updatable == true
