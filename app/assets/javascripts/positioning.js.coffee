@@ -35,17 +35,33 @@ jQuery ($) ->
     # create a swiper to scroll through the float blocks
     setSwiper: () =>
       @_swiper = new Swipe @_window[0]
-      
-      # Override the swiper prev() function to allow the slider to go beyond
-      # the left limit.
-      @_swiper.prev = () =>
-        @_swiper.slide @_swiper.index-1, @_swiper.speed
+      @_swiper.onTouchEnd = (e) ->
+
+        # determine if slide attempt triggers next/prev slide
+        isValidSlide = 
+          Number(new Date()) - @.start.time < 250      # if slide duration is less than 250ms
+          # && Math.abs(@_swiper.deltaX) > 20                   # and if slide amt is greater than 20px
+          # || Math.abs(@_swiper.deltaX) > @_swiper.width/2        # or if slide amt is greater than half the width
+
+        # determine if slide attempt is past start and end
+        isPastBounds = 
+          @.index == @.length - 1 && @.deltaX < 0   # or if last slide and slide amt is less than 0
         
+        if isValidSlide && !isPastBounds
+          i = @.deltaX < 0 ? 1 : -1
+        else
+          i = 0
+          
+        # if not scrolling vertically
+        if !@.isScrolling
+          # call slide function with slide end value based on isValidSlide and isPastBounds tests
+          @.slide( @.index + i, @.speed )
+      
       # For non-swiping test purposes
       $('.next').bind "click", () =>
         @_swiper.next()
       $('.prev').bind "click", () =>
-        @_swiper.prev()
+        @_swiper.slide @_swiper.index-1, @_swiper.speed
       
     # Set up swiper for the displayed floats.
     setContentSwiper: () =>
