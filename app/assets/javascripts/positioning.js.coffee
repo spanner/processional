@@ -43,7 +43,7 @@ jQuery ($) ->
             i = 0
           this.slide this.index + i, this.speed
         e.stopPropagation()
-      @_swiper.onTouchMove = (e) =>
+      @_swiper.onTouchMove = (e) ->
         if(e.touches.length > 1 || e.scale && e.scale !== 1) return
         this.deltaX = e.touches[0].pageX - this.start.pageX
         if typeof this.isScrolling == 'undefined'
@@ -51,10 +51,10 @@ jQuery ($) ->
         if !this.isScrolling
           e.preventDefault()
           clearTimeout this.interval
-          # increase resistance if first or last slide
+          # increase resistance if last slide
           this.deltaX = 
             this.deltaX / 
-              ( (this.index == this.length - 1                # or if last slide and sliding right
+              ( (this.index == this.length - 1                # if last slide and sliding right
                 && this.deltaX < 0                            # and if sliding at all
               ) ?                                             
               ( Math.abs(this.deltaX) / this.width + 1 )      # determine resistance level
