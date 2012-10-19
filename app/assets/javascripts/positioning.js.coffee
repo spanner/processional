@@ -43,7 +43,7 @@ jQuery ($) ->
 
     # create a swiper to scroll through the float blocks
     setSwiper: () =>
-      @_swiper = new Swipe @_window[0], {moved_callback: @contentStick}
+      @_swiper = new Swipe @_window[0]
       
       # For non-swiping test purposes
       $('.next').bind "click", () =>
@@ -53,7 +53,9 @@ jQuery ($) ->
       
     # Set up swiper for the displayed floats.
     setContentSwiper: () =>
-      @_content_swiper = new Swipe @_content_window[0]
+      @_content_swiper = new Swipe @_content_window[0], {moved_callback: @contentStick}
+      
+      # For non-swiping test purposes
       $('.next_float').bind "click", () =>
         @_content_swiper.next()
       $('.prev_float').bind "click", () =>
