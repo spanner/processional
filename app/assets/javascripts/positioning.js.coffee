@@ -5,11 +5,13 @@ jQuery ($) ->
       @_slider_floats = @_slider.children('.float')
       @_window = @_slider.parent()
       @_content_window = $('#content_window')
+      @_width = $('#window').width()
       @_speed = 10
       @_start_time = Date.now()
       @_float = $('#float')
       @_pointer = @_slider.find('.pointer')
       @_updatable = true
+      @_slideable = true
       @getPath()
       @getFloats()
       @setSwiper()
@@ -30,7 +32,7 @@ jQuery ($) ->
       unless float_index == index
         i = parseInt(block.attr("data-index"), 10)
         @_content_swiper.slide(i)
-  
+      
   
     # swipeTo: (i) =>
     #   @_content_swiper.slide(i)
@@ -43,7 +45,7 @@ jQuery ($) ->
 
     # create a swiper to scroll through the float blocks
     setSwiper: () =>
-      @_swiper = new Swipe @_window[0]
+      @_swiper = new Swipe @_window[0], {callback: @noSlide}
       
       # For non-swiping test purposes
       $('.next').bind "click", () =>
@@ -51,6 +53,9 @@ jQuery ($) ->
       $('.prev').bind "click", () =>
         @_swiper.slide @_swiper.index-1, @_swiper.speed
       
+    noSlide: () =>
+      @_slideable = false
+    
     # Set up swiper for the displayed floats.
     setContentSwiper: () =>
       @_content_swiper = new Swipe @_content_window[0], {moved_callback: @contentStick}
@@ -88,7 +93,8 @@ jQuery ($) ->
       unless @_swiper.index == 0
         @_swiper.slide 0
       @_updatable = true
-
+      @_slideable = true
+      
     # Get route data from the server and calculate the distance of each point
     # from the start of the route.
     getPath: () =>
@@ -153,27 +159,33 @@ jQuery ($) ->
       index = $.indexOfClosestPointOnLine position, @_path
       start_dist = $.distanceAlongLine position, @_path, @_distances, index
       distance_from_head = head_distance - start_dist
-      slider_offset = - Math.round(distance_from_head)
-      @updatePosition(slider_offset)
+      slider_offset = Math.round(distance_from_head)
+      @updatePosition slider_offset
 
     # Set the left position of the slider to the offset.
     # Move the pointer to the device's position in procession.
     # Move the content swiper to the right float.
     updatePosition: (offset) =>
-      @_slider.css
-        left: offset
-        "margin-left": "#{offset+120}px"
+      if @_slideable == true
+        @_slider.css
+          "-webkit-transform": "translate3d(#{-offset}px, 0, 0)"
+        @calcIndex(offset)
       @_pointer.css
-        left: -offset
+        left: offset
       if @_updatable == true
         @findFloat offset
+    
+    calcIndex: (offset) =>
+      i = Math.floor offset/@_width
+      @_swiper.index = i
+      
 
     # Find the float being pointed at (or the next one if there is a next one)
     # and slide the content swiper to the same index
     # If no float, scroll the content swiper back to the start
     findFloat: (offset) =>
       floats = @_floats.filter (float) =>
-        (float.offset <= -offset) and (float.length + float.offset >= (-offset))
+        (float.offset <= offset) and (float.length + float.offset >= (offset))
       float = floats[0]
       content = @_float.find('.content')
       if float
@@ -182,7 +194,7 @@ jQuery ($) ->
       else
         # find the next float
         floats = @_floats.filter (float) =>
-          float.offset > -offset
+          float.offset > offset
         float = floats[0]
         if float
           i = @_floats.indexOf(float)
