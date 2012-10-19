@@ -5,7 +5,7 @@ jQuery ($) ->
       @_slider_floats = @_slider.children('.float')
       @_window = @_slider.parent()
       @_content_window = $('#content_window')
-      @_speed = 1
+      @_speed = 10
       @_start_time = Date.now()
       @_float = $('#float')
       @_pointer = @_slider.find('.pointer')
@@ -36,11 +36,22 @@ jQuery ($) ->
     setSwiper: () =>
       @_swiper = new Swipe @_window[0]
       
+      # Override the swiper prev() function to allow the slider to go beyond
+      # the left limit.
+      @_swiper.prev = () =>
+        @_swiper.slide @_swiper.index-1, @_swiper.speed
+        
+      # For non-swiping test purposes
+      $('.next').bind "click", () =>
+        @_swiper.next()
+      $('.prev').bind "click", () =>
+        @_swiper.prev()
+      
     # Set up swiper for the displayed floats.
     setContentSwiper: () =>
       @_content_swiper = new Swipe @_content_window[0], {callback: @stopContentUpdate}
     
-    # Prevent content slider from sliding automatically
+    # Prevent content slider from sliding automatically.
     stopContentUpdate: () =>
       @_updatable = false
     
@@ -63,6 +74,8 @@ jQuery ($) ->
     findPointer: (e) =>
       e.preventDefault()
       @deviceLocation()
+      unless @_swiper.index == 0
+        @_swiper.slide 0
       @_updatable = true
 
     # Get route data from the server and calculate the distance of each point
@@ -139,10 +152,10 @@ jQuery ($) ->
       if @_sliding
         @_slider.stop().animate
           left: offset
-          , 300
+          , 3000, "linear"
       @_pointer.stop().animate
         left: -offset
-        , 300
+        , 3000, "linear"
       if @_updatable == true
         @findFloat(offset)
 
@@ -156,7 +169,7 @@ jQuery ($) ->
       content = @_float.find('.content')
       if float
         i = @_floats.indexOf(float)
-        @_content_swiper.slide(i)
+        @_content_swiper.slide i
       else
         # find the next float
         floats = @_floats.filter (float) =>
@@ -164,9 +177,9 @@ jQuery ($) ->
         float = floats[0]
         if float
           i = @_floats.indexOf(float)
-          @_content_swiper.slide(i)
+          @_content_swiper.slide i
         else
-          @_content_swiper.slide(0)
+          @_content_swiper.slide 0
 
     # Calculate the total distance of each point from the start of the route
     # and push into parallel array
