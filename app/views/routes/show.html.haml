@@ -1,4 +1,7 @@
 .body
+  #find_me
+    %a{:href => "#"}
+      where am I?
   #window
     .slider
       - index = 0
@@ -9,23 +12,7 @@
             = float.name
       .pointer{:style => "display:none"}
         YOU ARE HERE
-  #slider_controls
-    / .prev
-    /   %a{:href => "#"}
-    /     <
-    / .next
-    /   %a{:href => "#"}
-    /     >
-    #find_me
-      %a{:href => "#"}
-        where am I?
   #content
-    / .prev_float
-    /   %a{:href => "#"}
-    /     <
-    / .next_float
-    /   %a{:href => "#"}
-    /     >
     #content_window
       #floats
         - index = 0

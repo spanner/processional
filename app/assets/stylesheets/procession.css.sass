@@ -1,6 +1,6 @@
 body
 $pointer_margin: 120px
-$slider_height: 100px
+$window_height: 100px
 $top_margin: 20px
 $slider_controls_height: 20px
 .body
@@ -12,15 +12,21 @@ $slider_controls_height: 20px
     color: #dde
   a
     text-decoration: none
+  #find_me
+    top: 0
+    position: absolute
+    height: 20px
+    width: 100%
+    text-align: center
   #window
     margin-top: $top_margin !important
     position: absolute
     overflow: hidden
-    height: $slider_height
+    height: $window_height
     width: 100%
     .slider
       position: absolute
-      height: $slider_height - 20px
+      height: $window_height - 20px
       margin-left: $pointer_margin !important
       .pointer
         position: absolute
@@ -45,22 +51,9 @@ $slider_controls_height: 20px
           color: #fff
           margin: 0
   
-  #slider_controls
-    top: $slider_height + $top_margin
-    position: absolute
-    height: $slider_controls_height
-    width: 100%
-    .prev
-      float: left
-    .next
-      float: right
-    #find_me
-      margin-left: 100px
-      float: left
-    
   #content
-    position: absolute
-    top: $slider_height + $top_margin + $slider_controls_height
+    position: relative
+    top: $window_height + $top_margin
     bottom: 0
     width: 100%
     .prev_float

@@ -9,6 +9,7 @@ jQuery ($) ->
       @_speed = 10
       @_start_time = Date.now()
       @_float = $('#float')
+      @_finder = $('#find_me').hide()
       @_pointer = @_slider.find('.pointer')
       @_updatable = true
       @_slideable = true
@@ -18,7 +19,7 @@ jQuery ($) ->
       @getFloats()
       @setSwiper()
       @setContentSwiper()
-      $('#find_me a').bind "click", @findPointer
+      @_finder.find('a').bind "click", @findPointer
       $.each @_slider_floats, (i, float) =>
         $(float).bind "click", @displayFloat
       
@@ -125,6 +126,7 @@ jQuery ($) ->
     # a latitude/longitude object.
     # Calculate the offset between device and head of procession.
     getPosition: (location) =>
+      @_finder.show()
       @_pointer.css
         visibility: "visible"
       point =
