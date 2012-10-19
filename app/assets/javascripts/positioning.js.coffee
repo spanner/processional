@@ -39,9 +39,7 @@ jQuery ($) ->
 
         # determine if slide attempt triggers next/prev slide
         isValidSlide = 
-          Number(new Date()) - @.start.time < 250      # if slide duration is less than 250ms
-          # && Math.abs(@_swiper.deltaX) > 20                   # and if slide amt is greater than 20px
-          # || Math.abs(@_swiper.deltaX) > @_swiper.width/2        # or if slide amt is greater than half the width
+          Number(new Date()) - @.start.time < 250 && Math.abs(@_swiper.deltaX) > 20 || Math.abs(@_swiper.deltaX) > @_swiper.width/2
 
         # determine if slide attempt is past start and end
         isPastBounds = 
@@ -65,8 +63,9 @@ jQuery ($) ->
       
     # Set up swiper for the displayed floats.
     setContentSwiper: () =>
-      @_content_swiper = new Swipe @_content_window[0], {callback: @stopContentUpdate}
-    
+      @_content_swiper = new Swipe @_content_window[0]
+      @_content_swiper.element.addEventListener "touchend", @stopContentUpdate()
+      
     # Prevent content slider from sliding automatically.
     stopContentUpdate: () =>
       @_updatable = false
@@ -182,6 +181,7 @@ jQuery ($) ->
       float = floats[0]
       content = @_float.find('.content')
       if float
+        console.log float
         i = @_floats.indexOf(float)
         @_content_swiper.slide i
       else
