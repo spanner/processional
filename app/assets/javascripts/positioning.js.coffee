@@ -10,7 +10,6 @@ jQuery ($) ->
       @_float = $('#float')
       @_pointer = @_slider.find('.pointer')
       @_updatable = true
-      @_sliding = true
       @getPath()
       @getFloats()
       @setSwiper()
@@ -44,7 +43,27 @@ jQuery ($) ->
             i = 0
           this.slide this.index + i, this.speed
         e.stopPropagation()
-        
+      @_swiper.onTouchMove = (e) =>
+        if(e.touches.length > 1 || e.scale && e.scale !== 1) return
+        this.deltaX = e.touches[0].pageX - this.start.pageX
+        if typeof this.isScrolling == 'undefined'
+          this.isScrolling = !!( this.isScrolling || Math.abs(this.deltaX) < Math.abs(e.touches[0].pageY - this.start.pageY) )
+        if !this.isScrolling
+          e.preventDefault()
+          clearTimeout this.interval
+          # increase resistance if first or last slide
+          this.deltaX = 
+            this.deltaX / 
+              ( (this.index == this.length - 1                # or if last slide and sliding right
+                && this.deltaX < 0                            # and if sliding at all
+              ) ?                                             
+              ( Math.abs(this.deltaX) / this.width + 1 )      # determine resistance level
+              : 1 )                                           # no resistance if false
+
+          # translate immediately 1-to-1
+          this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)'
+          e.stopPropagation()
+      
       # For non-swiping test purposes
       $('.next').bind "click", () =>
         @_swiper.next()
@@ -158,9 +177,8 @@ jQuery ($) ->
     # Move the pointer to the device's position in procession.
     # Move the content swiper to the right float.
     updatePosition: (offset) =>
-      if @_sliding
-        @_slider.css
-          left: offset
+      @_slider.css
+        left: offset
       @_pointer.css
         left: -offset
       if @_updatable == true
