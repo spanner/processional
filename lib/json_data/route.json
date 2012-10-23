@@ -1,0 +1,23 @@
+{
+  "routes": [{
+    "points": [
+      {"latitude": 54.196604,"longitude": -3.092889},
+      {"latitude": 54.196799,"longitude": -3.094016},
+      {"latitude": 54.19705 ,"longitude": -3.095442},
+      {"latitude": 54.196975,"longitude": -3.095721},
+      {"latitude": 54.196291,"longitude": -3.096172},
+      {"latitude": 54.195889,"longitude": -3.096462},
+      {"latitude": 54.195876,"longitude": -3.095915},
+      {"latitude": 54.195939,"longitude": -3.095389},
+      {"latitude": 54.195996,"longitude": -3.094831},
+      {"latitude": 54.195914,"longitude": -3.094187}
+    ],
+    "color": {
+      "g": 100,
+      "r": 255,
+      "b": 12
+    },
+    "name": "Route 1"
+  }],
+  "revisionnumber": 0
+}

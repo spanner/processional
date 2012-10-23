@@ -14,8 +14,6 @@ jQuery ($) ->
       @_updatable = true
       @_slideable = true
       @getPath()
-      @_pointer.css
-        visibility: "hidden"
       @getFloats()
       @setSwiper()
       @setContentSwiper()
@@ -39,6 +37,7 @@ jQuery ($) ->
     # create a swiper to scroll through the float blocks
     setSwiper: () =>
       @_swiper = new Swipe @_window[0], {moved_callback: @noSlide}
+      
       # # For non-swiping test purposes
       # $('.next').bind "click", () =>
       #   @_swiper.next()
@@ -51,12 +50,12 @@ jQuery ($) ->
     # Set up swiper for the displayed floats.
     setContentSwiper: () =>
       @_content_swiper = new Swipe @_content_window[0], {moved_callback: @contentStick}
+
       # # For non-swiping test purposes
       # $('.next_float').bind "click", () =>
       #   @_content_swiper.next()
       # $('.prev_float').bind "click", () =>
       #   @_content_swiper.prev()
-      
       
     # Prevent content slider from sliding automatically.
     contentStick: () =>
@@ -65,16 +64,23 @@ jQuery ($) ->
     # Get floats data from server and start updating the position
     # of the procession.
     getFloats: () =>
-      $.getJSON "/procession_floats", (data) =>
-        @_floats = data
+      $.getJSON "/procession_floats.json", (data) =>
+        @_floats = data.entities
+        @showFloats()
         @setUpdater()
       window.setInterval () =>
-        $.getJSON "/procession_floats", (data) =>
-          @_floats = data
+        $.getJSON "/procession_floats.json", (data) =>
+          @_floats = data.entities
           $.each data, (i, float) =>
             @_slider_floats.find("[data-index='#{i}']").css
               left: float.offset
       , 10000
+      
+    #
+    showFloats: () =>
+      $.each @_floats, (i, float) =>
+        @_slider.append("<a href='#' class='float' data-float-id='#{float.id}' data-index='#{i}' data-offset='#{-float.offset}' style='width: #{float.length}px !important; left:#{float.offset}px; height: 100%'><p>#{float.name}</p></a>")
+        @_content_window.find('#floats').append("<div class='content_float' data-float-id='#{float.id}' data-index='#{i}'><div class='content' data-float-id='#{float.id}'><h2>#{float.name}</h2><p>#{float.text}</p></div></div>")
 
     # Slide the slider to the position of the pointer.
     # Allow the content swiper to slide automatically.
@@ -92,8 +98,8 @@ jQuery ($) ->
     # from the start of the route.
     getPath: () =>
       @_path = []
-      $.getJSON "1/points", (data) =>
-        $.each data, (i, point) =>
+      $.getJSON "/routes/1", (data) =>
+        $.each data.routes[0].points, (i, point) =>
           p =
             latitude: parseFloat point.latitude
             longitude: parseFloat point.longitude
@@ -127,8 +133,7 @@ jQuery ($) ->
     # Calculate the offset between device and head of procession.
     getPosition: (location) =>
       @_finder.show()
-      @_pointer.css
-        visibility: "visible"
+      @_pointer.show()
       point =
         latitude: location.coords.latitude
         longitude: location.coords.longitude
@@ -172,10 +177,10 @@ jQuery ($) ->
       if @_updatable == true
         @findFloat offset
     
+    #
     calcIndex: (offset) =>
       i = Math.floor offset/@_width
-      @_swiper.index = i
-      
+      @_swiper.index = i 
 
     # Find the float being pointed at (or the next one if there is a next one)
     # and slide the content swiper to the same index

@@ -8,7 +8,10 @@ class RoutesController < ApplicationController
   end
   
   def show
-    respond_with @route
+    @data = File.read("lib/json_data/route.json")
+    respond_with @route do |format|
+      format.json {render :json => @data}
+    end
   end
 
 private

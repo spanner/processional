@@ -2,8 +2,11 @@ class ProcessionFloatsController < ApplicationController
   respond_to :html, :json, :js
 
   def index
+    @data = File.read("lib/json_data/floats.json")
     @floats = ProcessionFloat.all
-    respond_with @floats
+    respond_with @floats do |format|
+      format.json {render :json => @data}
+    end
   end
   
   def show
@@ -12,5 +15,6 @@ class ProcessionFloatsController < ApplicationController
       format.js { render :partial => "float" }
     end
   end
-  
+
+
 end
